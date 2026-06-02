@@ -1,0 +1,6 @@
+- name: I want to ping the server
+  hosts: all # target servers (inventory)
+  tasks:      # tasks/modules/collections
+  - name: ping the server
+    ping:
+    

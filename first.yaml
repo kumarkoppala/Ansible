@@ -1,0 +1,22 @@
+- name: "student 1"
+  dob:  "0987"
+  mobile: "9908908095"
+  addresses:
+  - type: "perm"
+    street: "settigunta"
+    pin: 516101
+  - type: "current"
+    street: "settigunta"
+    pin: 516101 # here Adress is list, if you want to get permanent address student[0].addresses[0].type
+
+- name: "student 2"
+  dob:  "0987"
+  mobile: "9908908095"
+  addresses:
+  - type: "perm"
+    street: "settigunta"
+    pin: 516101
+  - type: "current"
+    street: "settigunta"
+    pin: 516101 # here Adress is list, if you want to get permanent address addresses[0].type
+

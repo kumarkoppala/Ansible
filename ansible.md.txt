@@ -1,0 +1,25 @@
+## how to execute command in another instance using ssh without logging in
+```
+ssh ec2-user@IP -C "touch /tmp/hello.txt" --> to create a file
+ssh ec2-user@IP -C "cd /tmp && sudo sh 01-mongodb.sh"
+
+\*when we create server we get plain server, if we make server ready to host the aplication that is called configuring the server, managing this configuration is called configuration management.\*
+\*Ansible is developed by using python\*
+
+everyting in linux is command
+in ansible we will call it as module/
+ansible all -i 172.22.55.20, -e ansible_user=ec2-user -e ansible_password=DevOps321 -m ping
+ansible all -i 172.22.55.20, -e ansible_user=ec2-user -e ansible_password=DevOps321 -m package -b -a "name=nginx state=present"
+ansible all -i 172.22.55.20, -e ansible_user=ec2-user -e ansible_password=DevOps321 -m service -b -a "name=nginx state=started"
+
+-i (Inventory): Specifies the target host or inventory file.
+The trailing comma (172.22.55.20,) trick forces Ansible to treat the string as a direct list of IP addresses instead of looking for a file.
+-e (Extra Variables): Passes runtime variables to the command. Here, it explicitly sets the SSH username (ansible_user=ec2-user) and the login password (ansible_password=DevOps321) for the target machine.
+-m (Module): Defines the Ansible module to execute. The package module is an OS-agnostic manager that automatically calls yum, apt, or dnf depending on the target system.
+-a (Arguments): Passes the required arguments to the chosen module. In this case, it instructs the package manager to ensure nginx is installed (state=present).
+-b become root
+
+if we keep all the modules of ansible we are using against server in a file, that is called playbook
+YAML --> Yet another markup launguage
+XML, HTML
+HTML --> <h1>Hi</h1>

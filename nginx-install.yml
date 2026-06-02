@@ -1,0 +1,31 @@
+- name: install nginx
+  hosts: roboshop
+  become: yes
+  tasks:
+  - name: install nginx
+    package:
+      name: nginx
+      state: present # if package is already installed it'll not do anything
+      #state: latest # if packge alreay there it'll check for updates and install, if package upto date ntg do
+      #state: abscent # to remove package
+
+- name: start service nginx
+  hosts: roboshop
+  become: yes
+  tasks:
+  - name: start nginx
+    service:
+      name: nginx
+      state: started/restarted/reloaded/stopped
+      enabled: yes
+      #started: Ensures the service is currently running. If it is stopped, Ansible starts it.
+      #stopped: Ensures the service is not running. If it is active, Ansible shuts it down.
+      #restarted: Forcefully stops and then starts the service immediately. (This always changes the system state, so it will always show a "changed" status in your logs).
+      #reloaded: Tells the service to read its configuration files again without a full shutdown. (Great for configuration changes where you cannot afford downtime).
+      #if we use systemd_service module we can perform below extra actions
+      #daemon_reload: yes --->Set to yes to run systemctl daemon-reload. Use this if you have manually created or modified a custom .service file under /etc/systemd/system/.
+      #masked: yes  --> Set to yes to completely lock/prevent a service from being started by any other process or user on the machine.
+      
+
+
+

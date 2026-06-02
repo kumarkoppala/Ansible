@@ -1,0 +1,7 @@
+- name: print message like echo in shell
+  hosts: frontend #for any specific servers
+  tasks:
+  - name: print message
+    debug:      #if we not any arguments it'll print Hellow World!
+      msg: "Hello Ansible!"
+      
