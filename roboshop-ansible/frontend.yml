@@ -20,7 +20,7 @@
   - name: create application directory
     file:
       path: /usr/share/nginx/html
-      state: present
+      state: directory
   - name: Download and unzip a code package
     ansible.builtin.unarchive:
       src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
