@@ -55,7 +55,6 @@
         record: "{{ item }}.{{ DOMAIN }}"
         type: A
         ttl: 1
-        value: ""
       loop: "{{ instances }}"
       when: action == "delete"
 
@@ -65,3 +64,5 @@
         state: absent
       loop: "{{ instances }}"
       when: action == "delete"
+    
+    
