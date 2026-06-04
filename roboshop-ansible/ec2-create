@@ -5,13 +5,63 @@
     instances: [ "mongodb", "catalogue", "user", "frontend" ]
     action: create
   tasks:    
-  - name: Create EC2 instance
-    amazon.aws.ec2_instance:
-      name: "{{ item }}"
-      instance_type: t3.micro
-      image_id: "{{ AMI }}"
-      security_group: "{{ SG }}"
-    loop: "{{ instances }}"
-    when: action == "create"
-    register: ec2_output
+    - name: Create EC2 instance
+      amazon.aws.ec2_instance:
+        name: "{{ item }}"
+        instance_type: t3.micro
+        image_id: "{{ AMI }}"
+        security_group: "{{ SG }}"
+      loop: "{{ instances }}"
+      when: action == "create"
+      register: ec2_output
 
+    - name: print the ec2_output
+      debug:
+        msg: "{{ ec2_output }}"
+      when: action == "create"
+
+    - name: Add private ip as an A record
+      amazon.aws.route53:
+        state: present
+        zone: "{{ DOMAIN }}"
+        record: "{{ item.item }}.{{ DOMAIN }}"
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].private_ip_address }}"
+      loop: "{{ ec2_output.results }}"
+      when:
+        - action == "create"
+        - item.item != "frontend"
+        - item.instances is defined and (item.instances | length > 0)
+
+    - name: Add public ip as an A record
+      amazon.aws.route53:
+        state: present
+        zone: "{{ DOMAIN }}"
+        record: "{{ item.item }}.{{ DOMAIN }}"
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].public_ip_address }}"
+      loop: "{{ ec2_output.results }}"
+      when:
+        - action == "create"
+        - item.item == "frontend"
+        - item.instances is defined and (item.instances | length > 0)
+
+    - name: Remove Route 53 DNS records
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ DOMAIN }}"
+        record: "{{ item }}.{{ DOMAIN }}"
+        type: A
+        ttl: 1
+        value: ""
+      loop: "{{ instances }}"
+      when: action == "delete"
+
+    - name: Terminate EC2 instances
+      amazon.aws.ec2_instance:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ instances }}"
+      when: action == "delete"
