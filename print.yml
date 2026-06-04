@@ -1,7 +1,8 @@
 - name: print message like echo in shell
-  hosts: frontend #for any specific servers
+  hosts: localhost #for any specific servers
+  connection: localhost
   tasks:
-  - name: print message
-    debug:      #if we not any arguments it'll print Hellow World!
-      msg: "Hello Ansible!"
+    - name: print message
+      debug:      #if we not any arguments it'll print Hellow World!
+        msg: "Hello Ansible!"
       

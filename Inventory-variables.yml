@@ -1,0 +1,7 @@
+- name: calling variables from inventory.ini
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: printing message
+      debug:
+        msg: "my name is {{ name }}, i'm {{ age }} years old and i'm from {{ city }}"

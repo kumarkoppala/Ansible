@@ -1,0 +1,17 @@
+- name: passing variable arguments through collections
+  hosts: localhost
+  connection: local
+  vars:
+    city: ttd
+  vars_prompt:
+    - name: name
+      prompt: "please enter username:"
+      private: false
+    - name: age
+      prompt: "please enter age:"
+      private: yes
+  tasks:
+    - name: printing message 
+      debug:
+        msg: "my name is {{ name }}, i'm {{ age }} years old and i'm from {{ city }}"
+

@@ -1,0 +1,9 @@
+- name: printing user info with variables
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: this is {{ name }} info
+      debug:
+        msg: "my name is {{ name }}, i'm {{ age }} years old and i'm from {{ city }}"

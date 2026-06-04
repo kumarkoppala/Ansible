@@ -1,0 +1,24 @@
+- name: variables exercises
+  hosts: localhost
+  connection: local # it'll not request for user name and password of localhost
+  vars:
+    name: "kumar"
+    age:  28
+    city: "Bangalore"
+
+  tasks:
+   -  name: print user data
+      vars:
+        city: "AP"   
+      debug:
+        msg: 
+          - "I'm {{ name }}, my age is {{ age }} and I'm from {{ city }}"
+          - "{{ age }} is even number"
+      when: age % 2 == 0
+   -  name: odd checking
+      debug:
+        msg: "the {{ age }} is odd number"
+      when: age % 2 != 0
+   -  name: print all facts
+      debug:
+        msg: "{{ ansible_facts }}"
