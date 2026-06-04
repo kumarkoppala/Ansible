@@ -7,3 +7,4 @@ USER_HOST: user.yokshithkumar.shop
 CATALOGUE_HOST: catalogue.yokshithkumar.shop
 user_name: "ec2-user"
 user_password: "DevOps321"
+REDIS_HOST: redis.yokshithkumar.shop
