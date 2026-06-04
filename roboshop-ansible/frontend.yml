@@ -18,7 +18,7 @@
       path: /usr/share/nginx/html
       state: absent
   - name: create application directory
-    file:
+    ansible.builtin.file:
       path: /usr/share/nginx/html
       state: directory
   - name: Download and unzip a code package
