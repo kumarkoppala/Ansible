@@ -1,0 +1,17 @@
+- name: ec2 instances and route table set up for roboshop
+  hosts: localhost
+  connection: local
+  vars:
+    instances: [ "mongodb", "catalogue", "user", "frontend" ]
+    action: create
+  tasks:    
+  - name: Create EC2 instance
+    amazon.aws.ec2_instance:
+      name: "{{ item }}"
+      instance_type: t3.micro
+      image_id: "{{ AMI }}"
+      security_group: "{{ SG }}"
+    loop: "{{ instances }}"
+    when: action == "create"
+    register: ec2_output
+

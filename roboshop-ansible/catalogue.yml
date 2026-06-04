@@ -1,0 +1,71 @@
+- name: catalogue server configuration setup
+  hosts: catalogue
+  become: yes
+  tasks:
+  - name: enabling nodejs latest version
+    ansible.builtin.dnf:
+      name: "@nodejs:20"
+      state: present
+  - name: Create a dedicated system user
+    ansible.builtin.user:
+      name: roboshop
+      comment: "roboshop system user"
+      home: /app
+      system: yes
+      shell: /sbin/nologin
+      state: present
+  - name: delete application directory already exist
+    file:
+      path: /app
+      state: absent
+  - name: create application directory
+    file:
+      path: /app
+      state: present
+  - name: Download and unzip a code package
+    ansible.builtin.unarchive:
+      src: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+      dest: /app
+      remote_src: yes
+  - name: install dependencies
+    community.general.npm:
+      path: /app
+  - name: copy catalogue service
+    template:
+      src: catalogue.service.j2
+      dest: /etc/systemd/system/catalogue.service
+  - name: copy mongodb repo
+    copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+  - name: install mongodb client
+    package:
+      name: mongodb-mongosh
+      state: present
+  - name: check catalogue schema exist ot not
+    shell: mongosh --host "{{ MONGODB_HOST }}" --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    register: catalogue_output
+    tags:
+    - mongodb
+  - name: print catalogue_output
+    debug: 
+      msg: "{{ catalogue_output }}"
+    tags:
+    - mongodb
+  - name: load products
+    shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
+    when: catalogue_output.stdout | int < 0
+    tags:
+    - mongodb
+  - name: deamon reload
+    systemd_service:
+      name: catalogue
+      daemon_reload: true
+  - name: enable and start catalogue
+    service:
+      name: catalogue
+      state: restarted
+      enabled: yes
+      
+
+

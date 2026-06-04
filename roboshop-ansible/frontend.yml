@@ -1,0 +1,38 @@
+- name: frontend server configuration setup
+  hosts: frontend
+  become: yes
+  tasks:
+  - name: enable nginx 24
+    command: dnf module enable nginx:1.24 -y
+  - name: install nginx 24
+    package:
+      name: nginx
+      state: present
+  - name: enable and start nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+  - name: delete application directory already exist
+    file:
+      path: /usr/share/nginx/html
+      state: absent
+  - name: create application directory
+    file:
+      path: /usr/share/nginx/html
+      state: present
+  - name: Download and unzip a code package
+    ansible.builtin.unarchive:
+      src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+      dest: /usr/share/nginx/html
+      remote_src: yes
+  - name: copy catalogue service
+    template:
+      src: nginx.service.j2
+      dest: /etc/nginx/nginx.conf
+  - name: enable and start nginx
+    service:
+      name: nginx
+      state: restarted
+      enabled: yes
+      

@@ -1,0 +1,9 @@
+AMI:  "ami-0220d79f3f480ecf5"
+Zone_ID:  "Z099141824Q6BLLYZEPJE"
+DOMAIN: "yokshithkumar.shop"
+SG: "roboshop-frontend"
+MONGODB_HOST: "mongodb.yokshithkumar.shop"
+USER_HOST: user.yokshithkumar.shop
+CATALOGUE_HOST: catalogue.yokshithkumar.shop
+user_name: "ec2-user"
+user_password: "DevOps321"
