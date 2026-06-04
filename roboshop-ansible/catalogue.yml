@@ -23,7 +23,7 @@
   - name: create application directory
     file:
       path: /app
-      state: present
+      state: directory
   - name: Download and unzip a code package
     ansible.builtin.unarchive:
       src: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
